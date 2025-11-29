@@ -31,7 +31,7 @@
 * Frontend: Javascript + React
 * Backend: Node.js + Express
 * Baza de date: PostgreSql
-* ORM: Prisma
+* ORM: Sequelize
 
 
 ## **Plan de implementare**
