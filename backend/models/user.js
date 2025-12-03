@@ -14,7 +14,7 @@ const User = sequelize.define('User', {
             len: [3, 20]
         }
     },
-    lastnName: {
+    lastName: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -31,11 +31,7 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            len: [8, 30],
-            is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/
-        }
+        allowNull: false
     }
 });
 
