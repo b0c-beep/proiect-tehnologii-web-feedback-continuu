@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Message = require('../models/message');
 const Activity = require('../models/activity');
+const authMiddleware = require('../middleware/authMiddleware');
 
 //POST: /api/messages SEND MESSAGE
 router.post('/', async (req, res) => {
@@ -38,10 +39,23 @@ router.post('/', async (req, res) => {
 });
 
 //GET: /api/messages/:activityId GET MESSAGES FOR ACTIVITY
-router.get('/:activityId', async (req, res) => {
+router.get('/:activityId', authMiddleware, async (req, res) => {
     try {
+
+        const { activityId } = req.params;
+        
+        const activity = await Activity.findByPk(activityId);
+
+        if(!activity) {
+            return res.status(404).json({ error: 'Activity not found.' });
+        }
+
+        if(activity.userId !== req.user.id) {
+            return res.status(403).json({ error: 'You do not have permission to view messages for this activity.' });
+        }
+
         const messages = await Message.findAll({ 
-            where: { activityId: req.params.activityId },
+            where: { activityId: activityId },
             order: [['createdAt', 'ASC']] 
         });
 
