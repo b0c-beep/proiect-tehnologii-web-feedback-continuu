@@ -22,6 +22,27 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 });
 
+// PATCH: /api/activities/:id MODIFICARE STATUS ACTIVITATE
+router.patch('/:id', authMiddleware, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { is_active } = req.body;
+        const activity = await Activity.findOne({ where: { id: id, userId: req.user.id } });
+
+        if (!activity) {
+            return res.status(404).json({ error: 'Activity not found.' });
+        }
+
+        activity.is_active = is_active;;
+        await activity.save();
+
+        res.status(200).json({ message: 'Activity status updated successfully.', activity });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // GET: /api/activities LISTA ACTIVITATILOR UNUI ANUMIT PROFESOR
 router.get('/', authMiddleware, async (req, res) => {
     try {

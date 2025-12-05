@@ -1,0 +1,114 @@
+Instructiuni rulare:
+
+1. Adaugare fisier .env in ./backend/ cu continutul:
+
+PORT=3000
+DATABASE_URL=postgresql://postgres.kakecdjedkubifgwuqys:WmUITgjvWswtNNr4@aws-1-eu-west-1.pooler.supabase.com:6543/postgres
+JWT_SECRET=ewdbgchjk234u5y23u5y23u5y23u5y23u5y23u5y2
+
+2. Instalare dependinte: 
+"cd ./backend/"
+"npm install"
+
+3. Rulare server:
+"npm run dev"
+
+4. Verificare rute:
+
+Profesor / Autentificare -----------------------------------------------------------------------
+
+POST /api/auth/register
+Descriere: Creare cont nou pentru profesor.
+Headers: (Niciunul)
+Body:
+{
+    "firstName": "Ion",
+    "lastName": "Popescu",
+    "email": "ion@test.com",
+    "password": "Pass123!"
+}
+
+POST /api/auth/login
+Descriere: Logare profesor (returnează token-ul).
+Headers: (Niciunul)
+Body:
+{
+    "email": "ion@test.com",
+    "password": "Pass123!"
+}
+
+Activitati ---------------------------------------------------------------------
+
+POST /api/activities
+Descriere: Profesorul creează o activitate nouă.
+Headers: Authorization: Bearer <TOKEN_JWT>
+Body:
+{
+    "title": "Curs React",
+    "duration_minutes": 90
+}
+
+GET /api/activities
+Descriere: Profesorul vede lista activităților create de el.
+Headers: Authorization: Bearer <TOKEN_JWT>
+Body: (Gol) 
+
+PATCH /api/activities/:id
+Descriere: Profesorul modifica statusul unei activitati.
+Headers: Authorization: Bearer <TOKEN_JWT>
+Body:
+{
+    "is_active": "true"
+}
+
+POST /api/activities/join
+Descriere: Studentul intră într-o activitate folosind codul.
+Headers: (Niciunul)
+Body:
+{
+    "access_code": "COD_GENERAT"
+}
+
+OBS: Merge doar la activitati care sunt active
+
+------------------------------------------------------------------------------
+
+Feedback ---------------------------------------------------------------------
+
+POST /api/feedback
+Descriere: Studentul trimite un emoticon.
+Headers: (Niciunul)
+Body:
+{
+    "activityId": 1,
+    "type": "smiley"
+}
+(Tipuri valide: "smiley", "frowny", "surprised", "confused")
+
+OBS: Merge doar la activitati care sunt active
+
+-------------------------------------------------------------------------------
+
+Mesaje anonime ----------------------------------------------------------------
+
+POST /api/messages
+Descriere: Studentul trimite un mesaj text.
+Headers: (Niciunul)
+Body:
+{
+    "activityId": 1,
+    "text": "Nu am înțeles exemplul."
+}
+
+OBS: Merge doar la activitati care sunt active
+
+
+GET /api/messages/:activityId
+Descriere: Profesorul vede mesajele de la o activitate.
+Exemplu URL: /api/messages/5
+Headers: Authorization: Bearer <TOKEN_JWT>
+Body: (Gol)
+
+OBS: Merge doar pentru token-ul profesorului care a creat activitatea
+
+-----------------------------------------------------------------------------
