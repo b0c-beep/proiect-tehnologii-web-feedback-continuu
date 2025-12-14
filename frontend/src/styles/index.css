@@ -1,6 +1,6 @@
-@import '@styles/variable.css';
+@import './variable.css';
 
-/* --- Resetare de bază --- */
+
 * {
   box-sizing: border-box;
   margin: 0;
