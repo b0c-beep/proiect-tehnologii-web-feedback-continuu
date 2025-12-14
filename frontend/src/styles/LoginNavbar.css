@@ -1,0 +1,48 @@
+.navbar {
+  width: 100%;
+  padding: 1.5rem 2rem; 
+  background-color: white; 
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo-wrapper:hover {
+  opacity: 0.9;
+}
+
+
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  /* Gradientul mov */
+  background: linear-gradient(135deg, #8b5cf6, #a855f7); 
+  border-radius: 10px; 
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
+}
+
+.brand-name {
+  font-size: 1.5rem; 
+  color: #1e293b; 
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.brand-accent {
+  color: #7c3aed; 
+}
