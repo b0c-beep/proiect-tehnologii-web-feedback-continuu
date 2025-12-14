@@ -1,0 +1,50 @@
+
+.join-btn {
+  
+  width: 100%;
+  padding: 1rem; 
+  margin-top: 0.5rem; 
+  
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; 
+  
+  
+  background-color: #0f172a; 
+  color: var(--text-white);
+  border: none;
+  border-radius: var(--radius-md); 
+  
+  
+  font-family: inherit; 
+  font-size: 1rem;
+  font-weight: 600; 
+  
+  
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.join-btn:hover {
+  background-color: #1e293b; 
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+.join-btn:active {
+  transform: translateY(0);
+  background-color: #020617; 
+}
+
+
+.join-btn:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+.btn-icon {
+  transition: transform 0.2s ease;
+}
