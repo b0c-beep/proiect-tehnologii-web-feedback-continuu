@@ -1,7 +1,6 @@
 import React from "react";
-import '@styles/LoginCardRight.css';
 import { useState } from "react";
-import RoleSwitcher from "@components/RoleSwitcher";
+import RoleSwitcher from "./RoleSwitcher";
 import LoginForm from "./LoginForm";
 
 const LoginCardRight = () => {
@@ -11,7 +10,7 @@ const LoginCardRight = () => {
         <div className="right-panel">
             <RoleSwitcher currentRole={role} onRoleChange={setRole} />
             <form className="login-form">
-                <LoginForm  role={role} />
+                <LoginForm role={role} />
             </form>
         </div>
     );

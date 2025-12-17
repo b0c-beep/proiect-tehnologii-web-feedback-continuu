@@ -1,5 +1,4 @@
 import React from "react";
-import "@styles/LoginDivider.css";
 
 const LoginDivider = () => {
     return (

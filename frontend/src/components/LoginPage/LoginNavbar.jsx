@@ -1,9 +1,7 @@
 import React from "react";
 import { Zap } from 'lucide-react';
-import '@styles/LoginNavbar.css';
 
 const LoginNavbar = () => {
-
     return (
         <nav className="navbar">
             <div className="navbar-container">
@@ -18,7 +16,6 @@ const LoginNavbar = () => {
             </div>
         </nav>
     );
-
 };
 
 export default LoginNavbar;
