@@ -1,7 +1,6 @@
 import React from "react";
-import "@styles/LoginContent.css";
-import LoginCardLeft from "@components/LoginCardLeft";
-import LoginCardRight from "@components/LoginCardRight";
+import LoginCardLeft from "./LoginCardLeft";
+import LoginCardRight from "./LoginCardRight";
 
 const LoginContent = () => {
     return (

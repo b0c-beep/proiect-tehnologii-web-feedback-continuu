@@ -1,5 +1,4 @@
 import React from "react";
-import "@styles/LoginCardLeft.css";
 
 const LoginCardLeft = () => {
     return (
