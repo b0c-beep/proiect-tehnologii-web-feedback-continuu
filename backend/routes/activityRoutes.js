@@ -84,4 +84,22 @@ router.post('/join', async (req, res) => {
     }
 });
 
+//DELETE: api/activities/:id STERGERE ACTIVITATE
+router.delete('/:id', authMiddleware, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const activity = await Activity.findOne({where: {id: id, userId: req.user.id}});
+
+        if(!activity) {
+            return res.status(404).json({error: "Activity not found"});
+        }
+
+        await activity.destroy();
+
+        res.status(200).json({message: 'Activity deleted successfully'});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    } 
+});
+
 module.exports = router;
