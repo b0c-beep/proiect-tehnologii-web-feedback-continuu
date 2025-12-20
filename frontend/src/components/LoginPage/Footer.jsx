@@ -6,7 +6,7 @@ const Footer = () => {
         <footer className="footer">
             <div className="footer-content">
                 <span className="copyright">
-                    © 2024 ClassPulse.
+                    © 2026 ClassPulse.
                 </span>
                 <span className="designed-by">
                     Designed with
