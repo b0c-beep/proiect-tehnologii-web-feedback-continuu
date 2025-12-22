@@ -26,7 +26,12 @@ router.post('/', async (req, res) => {
             text
         });
 
-        //TODO: Aici vom trimite evenimentul catre frontend in timp real cu Socket.io
+        const io = req.app.get('io');
+        io.to(`activity-${activityId}`).emit('new-message', { 
+            id: newMessage.id,
+            text: newMessage.text,
+            createdAt: newMessage.createdAt 
+        });
 
         res.json({ 
             success: true,

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const Feedback = require('../models/feedback');
 const Activity = require('../models/activity');
 
-// POST: /api/feedback/:activityId SUBMIT FEEDBACK
+// POST: /api/feedback/ SUBMIT FEEDBACK
 router.post('/', async (req, res) => {
     try {
         const { activityId, type } = req.body;
@@ -21,12 +21,17 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: 'This activity is no longer active.' });
         }
 
-        await Feedback.create({
+        const newFeedback = await Feedback.create({
             activityId,
             type
         });
 
-        //TODO: Aici vom trimite evenimentul catre frontend in timp real cu Socket.io
+        const io = req.app.get('io');
+        io.to(`activity-${activityId}`).emit('new-feedback', { 
+            id: newFeedback.id,
+            type: newFeedback.type,
+            createdAt: newFeedback.createdAt 
+        });
 
         res.json({ 
             success: true,
