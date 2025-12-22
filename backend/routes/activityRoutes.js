@@ -102,4 +102,20 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     } 
 });
 
+//GET: /api/activities/:id/status STATUS ACTIVITATE
+router.get('/:id/status', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const activity = await Activity.findByPk(id);
+
+        if(!activity) {
+            return res.status(404).json({error: "Activity not found", is_active: false});
+        }
+
+        res.status(200).json({is_active: activity.is_active});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
 module.exports = router;
