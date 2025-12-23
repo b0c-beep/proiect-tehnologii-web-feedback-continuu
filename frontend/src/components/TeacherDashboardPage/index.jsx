@@ -13,7 +13,7 @@ const TeacherDashboardPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [user, setUser] = useState(null);
-    const [isAlerted, setIsAlerted] = useState(false);
+    //const [isAlerted, setIsAlerted] = useState(false);
     const timerRef = useRef(null);
 
     useEffect(() => {
@@ -46,10 +46,10 @@ const TeacherDashboardPage = () => {
                     if (now >= endTime) {
                         try {
                             await toggleActivityStatus(activity.id, false);
-                            if (isAlerted === false) {
-                                alert(`Activity "${activity.title}" has ended automatically. Duration of ${activity.duration_minutes} minutes expired.`);
-                                setIsAlerted(true);
-                            }
+                            // if (isAlerted === false) {
+                            //     alert(`Activity "${activity.title}" has ended automatically. Duration of ${activity.duration_minutes} minutes expired.`);
+                            //     setIsAlerted(true);
+                            // }
 
 
                             loadActivities();
