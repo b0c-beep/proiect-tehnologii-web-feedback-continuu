@@ -20,9 +20,9 @@ const FeedbackGrid = ({ activityId }) => {
             <div className='feedback-section'>
 
                 <div className='feedback-grid'>
-                    {['smiley', 'frowny', 'surprised', 'confused'].map((type) => (
+                    {['smiley', 'frowny', 'surprised', 'confused'].map((type) => ( // Map feedback types
                         <FeedbackButton
-                            key = {type}
+                            key={type}
                             type={type}
                             onClick={handleFeedback}
                             disabled={isSubmitting} />

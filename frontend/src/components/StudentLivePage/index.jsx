@@ -11,43 +11,43 @@ import { useNavigate } from "react-router-dom";
 
 const StudentLivePage = () => {
     const navigate = useNavigate();
-    const pollingRef = useRef(null);
+    const pollingRef = useRef(null); // Polling reference for activity status
 
-    const activityId = localStorage.getItem('activityId');
-    const activityTitle = localStorage.getItem('activityTitle');
+    const activityId = localStorage.getItem('activityId'); // Activity ID
+    const activityTitle = localStorage.getItem('activityTitle'); // Activity title
 
     useEffect(() => {
-        if(!activityId) {
-            navigate('/');
+        if (!activityId) { // If no activity ID
+            navigate('/'); // Navigate to home
             return;
         }
 
-        connectSocket();
-        joinActivity(activityId);
+        connectSocket(); // Connect to socket
+        joinActivity(activityId); // Join activity
 
-        pollingRef.current = setInterval(async () => {
+        pollingRef.current = setInterval(async () => { // Polling for activity status
             try {
-                const isActive = await checkActivityStatus(activityId);
-                if(!isActive) {
-                    clearInterval(pollingRef.current);
-                    alert('This session has been ended by the teacher!');
-                    localStorage.removeItem('activityId');
-                    localStorage.removeItem('activityTitle');
-                    disconnectSocket();
-                    navigate('/');
+                const isActive = await checkActivityStatus(activityId); // Check activity status
+                if (!isActive) {
+                    clearInterval(pollingRef.current); // Clear polling
+                    alert('This session has been ended by the teacher!'); // Alert user
+                    localStorage.removeItem('activityId'); // Remove activity ID
+                    localStorage.removeItem('activityTitle'); // Remove activity title
+                    disconnectSocket(); // Disconnect socket
+                    navigate('/'); // Navigate to home
                 }
             } catch (error) {
                 console.error('Error checking activity status:', error);
             }
-        },4000);
+        }, 4000); // Poll every 4 seconds
 
         return () => {
-            clearInterval(pollingRef.current);
-            disconnectSocket();
+            clearInterval(pollingRef.current); // Clear polling
+            disconnectSocket(); // Disconnect socket
         };
     }, [activityId, navigate]);
 
-    if(!activityId) return null;
+    if (!activityId) return null;
 
     return (
         <div className="student-live-wrapper">

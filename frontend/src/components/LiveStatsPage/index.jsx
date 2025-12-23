@@ -13,19 +13,20 @@ import { toggleActivityStatus } from '@utils/dashboard_api';
 import './LiveStatsPage.css';
 
 const LiveStatsPage = () => {
-    const { id: activityId } = useParams();
-    const navigate = useNavigate();
-    const timerRef = useRef(null);
+    const { id: activityId } = useParams(); // Get activity ID from URL
+    const navigate = useNavigate(); // Navigate to other pages
+    const timerRef = useRef(null); // Reference for timer
 
-    const [user] = useState(() => JSON.parse(localStorage.getItem('user')));
-    const [activity, setActivity] = useState(null);
-    const [stats, setStats] = useState({ smiley: 0, frowny: 0, surprised: 0, confused: 0, total: 0 });
-    const [messages, setMessages] = useState([]);
-    const [feedbackTimes, setFeedbackTimes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [timeRemaining, setTimeRemaining] = useState(null);
+    const [user] = useState(() => JSON.parse(localStorage.getItem('user'))); // Get user from localStorage
+    const [activity, setActivity] = useState(null); // Activity data
+    const [stats, setStats] = useState({ smiley: 0, frowny: 0, surprised: 0, confused: 0, total: 0 }); // Stats data
+    const [messages, setMessages] = useState([]); // Messages data
+    const [feedbackTimes, setFeedbackTimes] = useState([]); // Feedback times data
+    const [loading, setLoading] = useState(true); // Loading state
+    const [timeRemaining, setTimeRemaining] = useState(null); // Time remaining
 
     useEffect(() => {
+        // Load data
         const loadData = async () => {
             try {
                 const [activityData, statsData, timelineData, messagesData] = await Promise.all([
@@ -53,24 +54,26 @@ const LiveStatsPage = () => {
         connectSocket();
         joinActivity(activityId);
 
-        onNewFeedback((feedback) => {
-            setStats(prev => ({
+
+        // Socket.IO event handlers
+        onNewFeedback((feedback) => { // Handle new feedback
+            setStats(prev => ({ // Update stats
                 ...prev,
                 [feedback.type]: prev[feedback.type] + 1,
                 total: prev.total + 1
             }));
-            setFeedbackTimes(prev => [...prev, { type: feedback.type, createdAt: feedback.createdAt }]);
+            setFeedbackTimes(prev => [...prev, { type: feedback.type, createdAt: feedback.createdAt }]); // Update feedback times
         });
 
-        onNewMessage((message) => {
-            setMessages(prev => [...prev, message]);
+        onNewMessage((message) => { // Handle new message
+            setMessages(prev => [...prev, message]); // Update messages
         });
 
-        return () => {
-            disconnectSocket();
-            if (timerRef.current) clearInterval(timerRef.current);
+        return () => {// Cleanup after unmount
+            disconnectSocket(); // Disconnect socket
+            if (timerRef.current) clearInterval(timerRef.current); // Clear interval
         };
-    }, [activityId, navigate]);
+    }, [activityId, navigate]); // Re-run when activityId or navigate changes
 
     // Duration check effect
     useEffect(() => {
@@ -90,31 +93,33 @@ const LiveStatsPage = () => {
                 // Time expired - auto stop
                 clearInterval(timerRef.current);
                 try {
-                    await toggleActivityStatus(activityId, false);
-                    setActivity(prev => ({ ...prev, is_active: false, started_at: null }));
+                    await toggleActivityStatus(activityId, false); // Auto stop activity
+                    setActivity(prev => ({ ...prev, is_active: false, started_at: null })); // Update activity
                     alert(`Activity "${activity.title}" has ended. Duration of ${activity.duration_minutes} minutes has expired.`);
                 } catch (err) {
                     console.error('Error auto-stopping activity:', err);
                 }
-                setTimeRemaining(null);
+                setTimeRemaining(null); // Reset time remaining
             } else {
-                setTimeRemaining(Math.ceil(remaining / 1000));
+                setTimeRemaining(Math.ceil(remaining / 1000)); // Update time remaining
             }
         };
 
-        checkDuration();
-        timerRef.current = setInterval(checkDuration, 1000);
+        checkDuration(); // Run checkDuration on mount
+        timerRef.current = setInterval(checkDuration, 1000); // Run checkDuration every second
 
         return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
+            if (timerRef.current) clearInterval(timerRef.current); // Cleanup interval on unmount
         };
-    }, [activity?.is_active, activity?.started_at, activity?.duration_minutes, activityId]);
+    }, [activity?.is_active, activity?.started_at, activity?.duration_minutes, activityId]); // Re-run when activity changes
 
+    // Logout handler
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');
     };
 
+    // Export handler
     const handleExport = () => {
         exportToExcel(
             stats,
@@ -125,7 +130,7 @@ const LiveStatsPage = () => {
         );
     };
 
-    if (loading) {
+    if (loading) { // Loading state
         return <div className="loading">Loading...</div>;
     }
 

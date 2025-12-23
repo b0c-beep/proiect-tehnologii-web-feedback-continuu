@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Clock, Copy, BarChart3, Trash2 } from 'lucide-react';
 import { deleteActivity } from '@utils/dashboard_api';
 
-const ActivityCard = ({activity, onToggleActive, onRefresh }) => {
+const ActivityCard = ({ activity, onToggleActive, onRefresh }) => {
     const navigate = useNavigate();
 
-    const copyAccessCode = () => {
+    const copyAccessCode = () => { // Copy access code in clipboard
         navigator.clipboard.writeText(activity.access_code);
         alert('Code copied!');
     };
@@ -19,7 +19,7 @@ const ActivityCard = ({activity, onToggleActive, onRefresh }) => {
         if (window.confirm('Are you sure you want to delete this activity?')) {
             try {
                 await deleteActivity(activity.id);
-                onRefresh();
+                onRefresh(); // Refresh activities list
             } catch (error) {
                 alert('Failed to delete activity');
                 console.log(error);
@@ -46,7 +46,7 @@ const ActivityCard = ({activity, onToggleActive, onRefresh }) => {
                     <div className='code-display'>
                         <span className='code'>{activity.access_code}</span>
                         <button className='copy-btn' onClick={copyAccessCode}>
-                            <Copy size={16}/>
+                            <Copy size={16} />
                         </button>
                     </div>
                 </div>
@@ -60,14 +60,14 @@ const ActivityCard = ({activity, onToggleActive, onRefresh }) => {
                     <button
                         className='delete-btn'
                         onClick={handleDeleteActivity} >
-                            <Trash2 size={16}/>
+                        <Trash2 size={16} />
                     </button>
 
                     <button
                         className='stats-btn'
                         onClick={() => navigate(`/activity/${activity.id}`)} >
-                            <BarChart3 size={16} />
-                            View Stats
+                        <BarChart3 size={16} />
+                        View Stats
                     </button>
                 </div>
             </div>

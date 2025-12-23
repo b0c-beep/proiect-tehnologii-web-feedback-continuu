@@ -11,8 +11,8 @@ const CreateActivityModal = ({ isOpen, onClose, onCreated }) => {
     if (isOpen === false) return null;
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
+        e.preventDefault(); // Prevent default form submission
+        setError(''); // Reset error
 
         if (title.length < 5) {
             setError('Title must be at least 5 characters!');
@@ -22,9 +22,9 @@ const CreateActivityModal = ({ isOpen, onClose, onCreated }) => {
         setIsSubmitting(true);
         try {
             const result = await createActivity(title, duration);
-            onCreated(result.activity);
-            setTitle('');
-            setDuration(30);
+            onCreated(result.activity); // Notify parent component
+            setTitle(''); // Reset title
+            setDuration(30); // Reset duration
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to create activity.');
         } finally {

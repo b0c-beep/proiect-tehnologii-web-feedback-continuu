@@ -6,27 +6,28 @@ const authMiddleware = require('../middleware/authMiddleware');
 // POST: /api/feedback/ SUBMIT FEEDBACK
 router.post('/', async (req, res) => {
     try {
-        const { activityId, type } = req.body;
+        const { activityId, type } = req.body; //feedback data from request body
 
-        const validTypes = ['smiley', 'frowny', 'surprised', 'confused'];
+        const validTypes = ['smiley', 'frowny', 'surprised', 'confused']; //valid feedback types
         if (!validTypes.includes(type)) {
             return res.status(400).json({ error: 'Invalid feedback type.' });
         }
 
-        const activity = await Activity.findByPk(activityId);
+        const activity = await Activity.findByPk(activityId); //get activity from database
         if (!activity) {
             return res.status(404).json({ error: 'Activity not found.' });
         }
 
-        if (!activity.is_active) {
+        if (!activity.is_active) { //check if activity is active
             return res.status(400).json({ error: 'This activity is no longer active.' });
         }
 
-        const newFeedback = await Feedback.create({
+        const newFeedback = await Feedback.create({ //create new feedback
             activityId,
             type
         });
 
+        // emit new feedback to all users in the activity
         const io = req.app.get('io');
         io.to(`activity-${activityId}`).emit('new-feedback', {
             id: newFeedback.id,
@@ -34,6 +35,7 @@ router.post('/', async (req, res) => {
             createdAt: newFeedback.createdAt
         });
 
+        // return success message
         res.json({
             success: true,
             message: 'Feedback submitted successfully.'
@@ -46,12 +48,13 @@ router.post('/', async (req, res) => {
 // GET: /api/feedback/:activityId/stats GET FEEDBACK STATS
 router.get('/:activityId/stats', authMiddleware, async (req, res) => {
     try {
-        const { activityId } = req.params;
+        const { activityId } = req.params; //activity id from request params
 
-        const activity = await Activity.findByPk(activityId);
+        const activity = await Activity.findByPk(activityId); //get activity from database
         if (!activity) return res.status(404).json({ error: 'Activity not found.' });
         if (activity.userId !== req.user.id) return res.status(403).json({ error: 'Unauthorized.' });
 
+        // get feedback stats
         const counts = {
             smiley: await Feedback.count({ where: { activityId, type: 'smiley' } }),
             frowny: await Feedback.count({ where: { activityId, type: 'frowny' } }),
@@ -69,20 +72,23 @@ router.get('/:activityId/stats', authMiddleware, async (req, res) => {
 // GET: /api/feedback/:activityId/timeline GET FEEDBACK TIMELINE
 router.get('/:activityId/timeline', authMiddleware, async (req, res) => {
     try {
-        const { activityId } = req.params;
+        const { activityId } = req.params; //activity id from request params
 
-        const activity = await Activity.findByPk(activityId);
+        const activity = await Activity.findByPk(activityId); //get activity from database
         if (!activity) return res.status(404).json({ error: 'Activity not found.' });
         if (activity.userId !== req.user.id) return res.status(403).json({ error: 'Unauthorized.' });
 
+        // get feedback timeline
         const feedbacks = await Feedback.findAll({
             where: { activityId },
-            attributes: ['id', 'type', 'createdAt'],
-            order: [['createdAt', 'ASC']]
+            attributes: ['id', 'type', 'createdAt'], //select only id, type and createdAt
+            order: [['createdAt', 'ASC']] //order by createdAt
         });
 
+        // return feedback timeline
         res.status(200).json({
-            startedAt: activity.started_at || activity.createdAt,
+            startedAt: activity.started_at || activity.createdAt, //get started_at or createdAt
+            //return feedbacks
             feedbacks: feedbacks.map(f => ({
                 id: f.id,
                 type: f.type,

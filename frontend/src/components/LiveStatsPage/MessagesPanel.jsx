@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { MessageSquare } from 'lucide-react';
 
 const MessagesPanel = ({ messages }) => {
-    const scrollRef = useRef(null);
+    const scrollRef = useRef(null); // Reference for scroll
 
     useEffect(() => {
         if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight; // Scroll to bottom
         }
-    }, [messages]);
+    }, [messages]); // Re-run when messages change
 
     return (
         <div className="messages-card">
@@ -17,10 +17,10 @@ const MessagesPanel = ({ messages }) => {
                 Messages ({messages.length})
             </h3>
             <div className="messages-list" ref={scrollRef}>
-                {messages.length === 0 ? (
+                {messages.length === 0 ? ( // No messages
                     <p className="no-messages">No messages yet</p>
-                ) : (
-                    messages.map((msg) => (
+                ) : ( // Messages
+                    messages.map((msg) => ( // Map messages
                         <div key={msg.id} className="message-bubble">
                             <p>{msg.text}</p>
                             <span className="msg-time">
