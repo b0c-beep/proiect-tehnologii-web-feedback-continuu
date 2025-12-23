@@ -6,7 +6,7 @@ const Activity = sequelize.define('Activity', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    }, 
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -33,6 +33,11 @@ const Activity = sequelize.define('Activity', {
     is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    started_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
     }
 });
 
