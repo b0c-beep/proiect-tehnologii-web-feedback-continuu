@@ -8,23 +8,23 @@
 ## **Functionalitati minime**
 * ### *Profesor*
     * Autentificare simpla de tip register/login
-    * Profesorul poate defini activitati: descriere/titlu, durata si data, dupa creare se primeste un cod unic
+    * Profesorul poate defini activitati: titlu, durata, dupa creare se primeste un cod unic
     * Activitatea este adaugata intr-un dashboard cu toate activitatile active sau trecute ale profesorului respectiv
-    * O activitate porneste si devine accesibila prin cod la data specificata, pentru durata specificata
+    * O activitate poate fi pornita si devine accesibila prin cod, pentru durata specificata (activitatea poate fi dezactivata de profesor oricand)
     * Feedback-ul primit in timpul activitatilor este salvat in baza de date, se ofera statistici pe baza acestora, cu posibilitatea de exportare a datelor in Excel
 
 * ### *Student*
-    * Autentificare anonima, nu e nevoie de cont, studentul isi introduce numele si codul de acces pentru o activitate valida
+    * Autentificare anonima, nu e nevoie de cont, studentul introduce codul de acces pentru o activitate existenta si activa
     * In timpul activitatii, ecranul este impartit in patru cadrane, fiecare cu un emoticon asociat (😊, 😢, 😮, 😕), la click pe emoticon, este trimis un eveniment catre backend, feedbackul apare la profesor (pot fi trimise oricate emoticoane)
 
 * ### *Dashboard feedback (Profesor)*
     * Vizualizare live a feedback-ului, contoare prezente pentru fiecare emoticon
-    * Dupa terminarea activitatii este disponibila o distributie cronologica a emoticoanelor de-alungul timpului + statistici, cum ar fi minute la care au fost primite cele mai multe reactiia sau export de date
+    * Este disponibila o distributie cronologica a emoticoanelor de-alungul timpului + statistici, cum ar fi minute la care au fost primite cele mai multe reactiia sau export de date
 
 
 ## **Functionalitati optionale**
-* Pe langa emoticoane, studentii pot lasa mesaje anonime in chat, care nu sunt salvate in baza de date
-* Trimiterea unui mail generat automat profesorului cu rapoarte bazate pe activitati terminate (prin intermediul unui API extern)
+* Pe langa emoticoane, studentii pot lasa mesaje anonime in chat
+* Trimiterea unui mail generat automat profesorului cu raportul activitatii terminate (prin intermediul API-ului extern Resend)
 
 
 ## **Tehnologii**
