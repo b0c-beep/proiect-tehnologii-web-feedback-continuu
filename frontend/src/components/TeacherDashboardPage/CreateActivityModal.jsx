@@ -7,7 +7,7 @@ const CreateActivityModal = ({ isOpen, onClose, onCreated }) => {
     const [duration, setDuration] = useState(30);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
-    
+
     if (isOpen === false) return null;
 
     const handleSubmit = async (e) => {
@@ -43,22 +43,22 @@ const CreateActivityModal = ({ isOpen, onClose, onCreated }) => {
                     <h2>Create New Activity</h2>
 
                     <form onSubmit={handleSubmit}>
-                        <div className = 'form-group'>
+                        <div className='form-group'>
                             <label>Activity Title</label>
-                            <input 
+                            <input
                                 type='text'
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="e.g. Curs Tehnologii Web - Intro React" />
                         </div>
 
-                        <div className = 'form-group'>
+                        <div className='form-group'>
                             <label>Duration (minutes)</label>
-                            <input 
+                            <input
                                 type='number'
                                 value={duration}
                                 onChange={(e) => setDuration(parseInt(e.target.value))}
-                                min={30}
+                                min={1}
                                 max={120} />
                         </div>
 
@@ -67,8 +67,8 @@ const CreateActivityModal = ({ isOpen, onClose, onCreated }) => {
                         <button
                             type="submit"
                             className="submit-btn"
-                            disabled = {isSubmitting}>
-                                {isSubmitting ? 'Creating ... ' : 'Create Activity'}
+                            disabled={isSubmitting}>
+                            {isSubmitting ? 'Creating ... ' : 'Create Activity'}
                         </button>
                     </form>
                 </div>
