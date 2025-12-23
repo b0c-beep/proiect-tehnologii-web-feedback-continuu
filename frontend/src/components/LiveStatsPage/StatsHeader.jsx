@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const StatsHeader = ({ activity, onExport, timeRemaining }) => {
     const navigate = useNavigate();
 
+    // Format time
     const formatTime = (dateString) => {
         if (!dateString) return 'Not started';
         return new Date(dateString).toLocaleTimeString('ro-RO', {
@@ -12,6 +13,7 @@ const StatsHeader = ({ activity, onExport, timeRemaining }) => {
         });
     };
 
+    // Format remaining time
     const formatRemaining = (seconds) => {
         if (!seconds) return null;
         const mins = Math.floor(seconds / 60);
@@ -28,7 +30,7 @@ const StatsHeader = ({ activity, onExport, timeRemaining }) => {
             <div className="header-left">
                 <h1 className="activity-title">{activity?.title}</h1>
                 <div className="header-meta">
-                    {activity?.is_active && (
+                    {activity?.is_active && ( // Live badge is active
                         <span className="live-badge">
                             <Radio size={10} className="pulse" /> LIVE
                         </span>

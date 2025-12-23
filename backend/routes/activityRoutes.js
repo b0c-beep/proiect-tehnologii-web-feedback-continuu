@@ -6,13 +6,14 @@ const Feedback = require('../models/feedback');
 const { sendActivityReport } = require('../utils/email_api');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// POST: /api/activities CREARE ACTIVITATE
+// POST: /api/activities CREATE ACTIVITY
 router.post('/', authMiddleware, async (req, res) => {
     try {
-        const { title, duration_minutes } = req.body;
+        const { title, duration_minutes } = req.body; //get title and duration from request body
 
-        const access_code = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const access_code = Math.random().toString(36).substring(2, 8).toUpperCase(); //get random access code
 
+        //create activity
         const newActivity = await Activity.create({
             title,
             duration_minutes,
@@ -26,25 +27,27 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 });
 
-// PATCH: /api/activities/:id MODIFICARE STATUS ACTIVITATE
+// PATCH: /api/activities/:id MODIFY ACTIVITY STATUS
 router.patch('/:id', authMiddleware, async (req, res) => {
     try {
-        const { id } = req.params;
-        const { is_active } = req.body;
-        const activity = await Activity.findOne({ where: { id: id, userId: req.user.id } });
+        const { id } = req.params; //get activity id from request params
+        const { is_active } = req.body; //get new activity status from request body
+        const activity = await Activity.findOne({ where: { id: id, userId: req.user.id } }); //get activity from database
 
         if (!activity) {
             return res.status(404).json({ error: 'Activity not found.' });
         }
 
-        // Set started_at when activity becomes active
+        // set started_at when activity becomes active
         if (is_active === true && !activity.is_active) {
             activity.started_at = new Date();
         }
 
-        // Reset started_at when activity is deactivated
+        // reset started_at when activity is deactivated
         if (is_active === false) {
             activity.started_at = null;
+
+            //send email report
             try {
                 const [user, smiley, frowny, surprised, confused, messages] = await Promise.all([
                     User.findByPk(req.user.id),
@@ -74,11 +77,11 @@ router.patch('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// GET: /api/activities/:id DETALII ACTIVITATE
+// GET: /api/activities/:id GET ACTIVITY DETAILS
 router.get('/:id', authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
-        const activity = await Activity.findOne({
+        const activity = await Activity.findOne({ //get activity from database by id
             where: { id: id, userId: req.user.id }
         });
 
@@ -92,10 +95,10 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// GET: /api/activities LISTA ACTIVITATILOR UNUI ANUMIT PROFESOR
+// GET: /api/activities GET ALL ACTIVITIES
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const activities = await Activity.findAll({
+        const activities = await Activity.findAll({ //get all activities from database
             where: { userId: req.user.id },
             order: [['createdAt', 'DESC']]
         });
@@ -106,12 +109,12 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 });
 
-// POST: /api/activities/join JOIN STUDENT LA ACTIVITATE
+// POST: /api/activities/join JOIN ACTIVITY
 router.post('/join', async (req, res) => {
     try {
-        const { access_code } = req.body;
+        const { access_code } = req.body; //get access code from request body
 
-        const activity = await Activity.findOne({ where: { access_code } });
+        const activity = await Activity.findOne({ where: { access_code } }); //get activity from database by access code
 
         if (!activity) {
             return res.status(404).json({ error: 'Activity not found with the provided access code.' });
@@ -121,6 +124,7 @@ router.post('/join', async (req, res) => {
             return res.status(400).json({ error: 'This activity is no longer active.' });
         }
 
+        //return activity details
         res.json({
             success: true,
             activityId: activity.id,
@@ -133,17 +137,17 @@ router.post('/join', async (req, res) => {
     }
 });
 
-//DELETE: api/activities/:id STERGERE ACTIVITATE
+//DELETE: api/activities/:id DELETE ACTIVITY
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        const { id } = req.params;
-        const activity = await Activity.findOne({ where: { id: id, userId: req.user.id } });
+        const { id } = req.params; //get activity id from request params
+        const activity = await Activity.findOne({ where: { id: id, userId: req.user.id } }); //get activity from database by id
 
         if (!activity) {
             return res.status(404).json({ error: "Activity not found" });
         }
 
-        await activity.destroy();
+        await activity.destroy(); //delete activity from database
 
         res.status(200).json({ message: 'Activity deleted successfully' });
     } catch (error) {
@@ -151,11 +155,11 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-//GET: /api/activities/:id/status STATUS ACTIVITATE
+//GET: /api/activities/:id/status GET ACTIVITY STATUS
 router.get('/:id/status', async (req, res) => {
     try {
-        const { id } = req.params;
-        const activity = await Activity.findByPk(id);
+        const { id } = req.params; //get activity id from request params
+        const activity = await Activity.findByPk(id); //get activity from database by id
 
         if (!activity) {
             return res.status(404).json({ error: "Activity not found", is_active: false });

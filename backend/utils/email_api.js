@@ -1,7 +1,8 @@
 const { Resend } = require("resend");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY); //resend instance
 
+// emoji map for feedback types
 const EMOJI_MAP = {
     smiley: '😊 Happy',
     frowny: '😔 Bored',
@@ -9,9 +10,11 @@ const EMOJI_MAP = {
     confused: '😕 Confused'
 };
 
+
+// generate report HTML
 const generateReportHTML = (activity, stats, messages) => {
     const total = stats.smiley + stats.frowny + stats.surprised + stats.confused;
-    
+
     return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #6366f1;">Activity Report: ${activity.title}</h1>
@@ -42,7 +45,7 @@ const generateReportHTML = (activity, stats, messages) => {
         </table>
         
         <h2 style="color: #1e293b; margin-top: 30px;">💬 Messages (${messages.length})</h2>
-        ${messages.length === 0 ? '<p style="color: #94a3b8;">No messages received</p>' : 
+        ${messages.length === 0 ? '<p style="color: #94a3b8;">No messages received</p>' :
             messages.map(m => `
                 <div style="background: #f8fafc; padding: 10px; margin: 5px 0; border-radius: 8px;">
                     <p style="margin: 0;">${m.text}</p>
@@ -59,9 +62,10 @@ const generateReportHTML = (activity, stats, messages) => {
     `;
 };
 
+// send activity report
 const sendActivityReport = async (teacherEmail, teacherName, activity, stats, messages) => {
     try {
-        const { data, error } = await resend.emails.send({
+        const { data, error } = await resend.emails.send({ //send email
             from: process.env.EMAIL_FROM,
             to: teacherEmail,
             subject: `📊 Activity Report for ${activity.title}`,

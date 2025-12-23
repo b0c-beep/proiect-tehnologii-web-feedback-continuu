@@ -8,27 +8,27 @@ import DashboardContent from "./DashboardContent";
 import CreateActivityModal from "./CreateActivityModal";
 
 const TeacherDashboardPage = () => {
-    const navigate = useNavigate();
-    const [activities, setActivities] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false);
-    const [user, setUser] = useState(null);
-    //const [isAlerted, setIsAlerted] = useState(false);
-    const timerRef = useRef(null);
+    const navigate = useNavigate(); // Navigation hook
+    const [activities, setActivities] = useState([]); // Activities list
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [showModal, setShowModal] = useState(false); // Modal visibility
+    const [user, setUser] = useState(null); // User data
+    const timerRef = useRef(null); // Timer reference
 
+    // Load activities on mount
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); // Get token from localStorage
         if (!token) {
             navigate('/');
             return;
         }
 
-        const userData = JSON.parse(localStorage.getItem('user'));
+        const userData = JSON.parse(localStorage.getItem('user')); // Get user data from localStorage
         setUser(userData);
         loadActivities();
 
         return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
+            if (timerRef.current) clearInterval(timerRef.current); // Cleanup timer on unmount
         };
     }, []);
 
@@ -38,20 +38,14 @@ const TeacherDashboardPage = () => {
             const now = Date.now();
 
             for (const activity of activities) {
-                if (activity.is_active && activity.started_at && activity.duration_minutes) {
+                if (activity.is_active && activity.started_at && activity.duration_minutes) { // Check if activity is active and has start time and duration
                     const startTime = new Date(activity.started_at).getTime();
-                    const durationMs = activity.duration_minutes * 60 * 1000;
+                    const durationMs = activity.duration_minutes * 60 * 1000; // Convert duration to milliseconds
                     const endTime = startTime + durationMs;
 
                     if (now >= endTime) {
                         try {
-                            await toggleActivityStatus(activity.id, false);
-                            // if (isAlerted === false) {
-                            //     alert(`Activity "${activity.title}" has ended automatically. Duration of ${activity.duration_minutes} minutes expired.`);
-                            //     setIsAlerted(true);
-                            // }
-
-
+                            await toggleActivityStatus(activity.id, false); // Auto-stop activity
                             loadActivities();
                         } catch (err) {
                             console.error('Error auto-stopping activity:', err);
@@ -64,17 +58,16 @@ const TeacherDashboardPage = () => {
         // Check every 5 seconds
         timerRef.current = setInterval(checkExpiredActivities, 5000);
 
-        // Also check immediately
         checkExpiredActivities();
 
         return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
+            if (timerRef.current) clearInterval(timerRef.current); // Cleanup timer on unmount
         };
     }, [activities]);
 
     const loadActivities = async () => {
         try {
-            const data = await fetchActivities();
+            const data = await fetchActivities(); // Fetch activities from API
             setActivities(data);
         } catch (error) {
             console.error('Failed to load activities');

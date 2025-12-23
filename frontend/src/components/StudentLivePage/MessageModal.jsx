@@ -7,13 +7,14 @@ const MessageModal = ({ activityId }) => {
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Handle submit
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!message.trim()) return;
+        e.preventDefault(); // Prevent default form submission
+        if (!message.trim()) return; // If no message
 
-        setIsSubmitting(true);
+        setIsSubmitting(true); // Set submitting state
         try {
-            await sendMessage(activityId, message);
+            await sendMessage(activityId, message); // Send message
             setMessage('');
             setIsOpen(false);
         } catch (error) {
@@ -29,7 +30,7 @@ const MessageModal = ({ activityId }) => {
                 <MessageCircle size={24} />
             </button>
 
-            {isOpen && (
+            {isOpen && ( // If modal is open
                 <div className='modal-overlay' onClick={() => setIsOpen(false)}>
                     <div className='message-modal' onClick={(e) => e.stopPropagation()}>
                         <button className='modal-close' onClick={() => setIsOpen(false)}>
@@ -53,7 +54,7 @@ const MessageModal = ({ activityId }) => {
                                 className='send-btn'
                                 disabled={isSubmitting || !message.trim()}
                             >
-                                <Send size={18}/>
+                                <Send size={18} />
                                 {isSubmitting ? 'Sending...' : 'Send Message'}
                             </button>
                         </form>

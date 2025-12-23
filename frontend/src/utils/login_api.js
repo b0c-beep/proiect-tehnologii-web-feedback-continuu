@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
+// Create axios instance
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -9,10 +10,7 @@ const api = axios.create({
     },
 });
 
-/**
- * Join Session - Student enters access code to join an active activity
- * POST /api/activities/join
- */
+
 export const clickJoinSession = async (accessCode) => {
     try {
         const response = await api.post('/activities/join', { access_code: accessCode });
@@ -33,10 +31,7 @@ export const clickJoinSession = async (accessCode) => {
     }
 };
 
-/**
- * Access Dashboard - Teacher login with email and password
- * POST /api/auth/login
- */
+
 export const clickAccessDashboard = async (email, password) => {
     try {
         if (!email || !password) {
@@ -62,10 +57,7 @@ export const clickAccessDashboard = async (email, password) => {
     }
 };
 
-/**
- * Register - Teacher creates a new account
- * POST /api/auth/register
- */
+
 export const clickRegister = async (firstName, lastName, email, password) => {
     try {
         if (!firstName || !lastName || !email || !password) {
@@ -91,17 +83,13 @@ export const clickRegister = async (firstName, lastName, email, password) => {
     }
 };
 
-/**
- * Helper: Get auth header for authenticated requests
- */
+
 export const getAuthHeader = () => {
     const token = localStorage.getItem('token');
     return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-/**
- * Helper: Logout user
- */
+
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

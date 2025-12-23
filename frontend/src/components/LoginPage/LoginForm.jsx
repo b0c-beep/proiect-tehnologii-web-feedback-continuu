@@ -13,16 +13,19 @@ const LoginForm = ({ role }) => {
     const [regEmail, setRegEmail] = useState("");
     const [regPassword, setRegPassword] = useState("");
 
+    // Join session handler
     const handleJoinSession = (e) => {
         e.preventDefault();
         clickJoinSession(accessCode);
     }
 
+    // Access dashboard handler
     const handleAccessDashboard = (e) => {
         e.preventDefault();
         clickAccessDashboard(email, password);
     }
 
+    // Register handler
     const handleRegister = (e) => {
         e.preventDefault();
         clickRegister(firstName, lastName, regEmail, regPassword);
@@ -30,7 +33,7 @@ const LoginForm = ({ role }) => {
 
     return (
         <div className="form-inputs">
-            {role === 'student' ? (
+            {role === 'student' ? ( // Student role
                 <>
                     <div className="input-group">
                         <label className="input-label">Access Code</label>
@@ -40,7 +43,7 @@ const LoginForm = ({ role }) => {
 
                     <LoginButton text="Join Session" clickHandler={handleJoinSession} />
                 </>
-            ) : (
+            ) : ( // Professor role
                 <>
                     <div className="input-group">
                         <label className="input-label">Email</label>

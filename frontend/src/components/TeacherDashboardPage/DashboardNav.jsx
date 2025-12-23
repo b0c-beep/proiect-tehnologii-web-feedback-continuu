@@ -6,7 +6,7 @@ const DashboardNav = ({ user, onLogout }) => {
         <>
             <nav className='dashboard-navbar'>
                 <div className='navbar-container'>
-                    {/* Logo */}
+
                     <div className='logo-wrapper'>
                         <div className='icon-box'>
                             <Zap size={20} color='white' fill='white' />
@@ -16,7 +16,7 @@ const DashboardNav = ({ user, onLogout }) => {
                         </h1>
                     </div>
 
-                    {/* User Section */}
+
                     <div className='user-section'>
                         <span className='user-greeting'>
                             Prof. {user?.firstName || 'N/A'}
