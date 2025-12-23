@@ -1,5 +1,7 @@
 # **Tema 6 - Aplicatie web pentru acordarea de feedback continuu** 
 
+# Proiect disponibil online la: https://classpulse-ase.vercel.app/
+
 ### Echipa: Team Boc 
 ### Membri: Boc Mario-Adrian & Bucur Ioana Rebecca 
 
@@ -44,6 +46,7 @@
 * ***Faza 3** - Implementare functionalitati optionale*
 
 * ***Faza 4** - Prezentare proiect*
+
 
 
 
