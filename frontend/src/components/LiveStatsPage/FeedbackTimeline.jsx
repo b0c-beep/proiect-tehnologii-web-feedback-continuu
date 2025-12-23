@@ -51,25 +51,24 @@ const FeedbackTimeline = ({ feedbackTimes }) => {
         <div className="timeline-card">
             <h3 className="chart-title">Feedback Per Minute</h3>
             <div className="chart-container-timeline">
-                // Responsive container for chart
                 <ResponsiveContainer width="100%" height={220}>
-                    <LineChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 30 }}> // Line chart
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" /> // Cartesian grid
-                        <XAxis // X axis
+                    <LineChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 30 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis
                             dataKey="minute"
                             tick={{ fill: '#64748b', fontSize: 12 }}
                             label={{ value: 'Minute', position: 'bottom', offset: 10, fill: '#64748b' }}
                         />
-                        <YAxis // Y axis
+                        <YAxis
                             tick={{ fill: '#64748b', fontSize: 12 }}
                             allowDecimals={false}
                             label={{ value: 'Count', angle: -90, position: 'insideLeft', fill: '#64748b' }}
                         />
-                        <Tooltip // Tooltip for when hovering over chart
+                        <Tooltip
                             contentStyle={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                             labelFormatter={(val) => `Minute ${val}`}
                         />
-                        <Line // Line
+                        <Line
                             type="monotone"
                             dataKey="count"
                             stroke="#8b5cf6"

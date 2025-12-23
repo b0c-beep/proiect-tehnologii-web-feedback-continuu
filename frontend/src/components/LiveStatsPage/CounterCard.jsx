@@ -12,7 +12,7 @@ const CounterCard = ({ type, count }) => {
     const config = EMOJI_CONFIG[type]; // Get emoji configuration
 
     return (
-        <div className="counter-card" style={{ '--card-accent': config.color }}> // Set card accent color for emoji
+        <div className="counter-card" style={{ '--card-accent': config.color }}>
             <span className="counter-emoji">{config.emoji}</span>
             <span className="counter-value">{count}</span>
             <span className="counter-label">{config.label}</span>
