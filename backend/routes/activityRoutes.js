@@ -1,5 +1,9 @@
 const router = require('express').Router();
 const Activity = require('../models/activity');
+const User = require('../models/user');
+const Message = require('../models/message');
+const Feedback = require('../models/feedback');
+const { sendActivityReport } = require('../utils/email_api');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // POST: /api/activities CREARE ACTIVITATE
@@ -41,10 +45,27 @@ router.patch('/:id', authMiddleware, async (req, res) => {
         // Reset started_at when activity is deactivated
         if (is_active === false) {
             activity.started_at = null;
+            try {
+                const [user, smiley, frowny, surprised, confused, messages] = await Promise.all([
+                    User.findByPk(req.user.id),
+                    Feedback.count({ where: { activityId: activity.id, type: 'smiley' } }),
+                    Feedback.count({ where: { activityId: activity.id, type: 'frowny' } }),
+                    Feedback.count({ where: { activityId: activity.id, type: 'surprised' } }),
+                    Feedback.count({ where: { activityId: activity.id, type: 'confused' } }),
+                    Message.findAll({ where: { activityId: activity.id }, order: [['createdAt', 'ASC']] })
+                ]);
+
+                const stats = { smiley, frowny, surprised, confused };
+
+                await sendActivityReport(user.email, `${user.firstName} ${user.lastName}`, activity, stats, messages);
+            } catch (err) {
+                console.error('Error sending email report:', err);
+            }
         }
 
         activity.is_active = is_active;
         await activity.save();
+
 
         res.status(200).json({ message: 'Activity status updated successfully.', activity });
 
